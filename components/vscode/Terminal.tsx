@@ -32,7 +32,7 @@ export function Terminal({ onClose }: TerminalProps) {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-    
+
     // Add welcome message
     setHistory([{
       command: '',
@@ -56,17 +56,17 @@ Type 'help' to see available commands.`,
   const findItemAtPath = (path: string, root = fileSystem): any => {
     if (!root) return null;
     if (path === '/' || path === '') return root;
-    
+
     const parts = path.split('/').filter(p => p);
     let current = root;
-    
+
     for (const part of parts) {
       if (!current.children) return null;
       const found = current.children.find((child: any) => child.name === part);
       if (!found) return null;
       current = found;
     }
-    
+
     return current;
   };
 
@@ -74,7 +74,7 @@ Type 'help' to see available commands.`,
     if (inputPath.startsWith('/')) {
       return inputPath;
     }
-    
+
     if (inputPath === '..') {
       const parts = currentPath.split('/').filter(p => p);
       if (parts.length > 0) {
@@ -83,15 +83,15 @@ Type 'help' to see available commands.`,
       }
       return '/';
     }
-    
+
     if (inputPath === '.') {
       return currentPath;
     }
-    
+
     if (inputPath.startsWith('../')) {
       const parts = currentPath.split('/').filter(p => p);
       const relativeParts = inputPath.split('/').filter(p => p);
-      
+
       for (const part of relativeParts) {
         if (part === '..') {
           if (parts.length > 0) parts.pop();
@@ -99,10 +99,10 @@ Type 'help' to see available commands.`,
           parts.push(part);
         }
       }
-      
+
       return '/' + parts.join('/');
     }
-    
+
     return currentPath === '/' ? `/${inputPath}` : `${currentPath}/${inputPath}`;
   };
 
@@ -110,11 +110,11 @@ Type 'help' to see available commands.`,
     const item = findItemAtPath(path);
     if (!item) return `ls: cannot access '${path}': No such file or directory`;
     if (item.type !== 'folder') return `ls: cannot access '${path}': Not a directory`;
-    
+
     if (!item.children || item.children.length === 0) {
       return '';
     }
-    
+
     // Sort items: folders first, then files, alphabetically
     const sortedItems = [...item.children].sort((a, b) => {
       if (a.type !== b.type) {
@@ -122,7 +122,7 @@ Type 'help' to see available commands.`,
       }
       return a.name.localeCompare(b.name);
     });
-    
+
     return sortedItems
       .map((child: any) => {
         if (child.type === 'folder') {
@@ -179,7 +179,7 @@ Type 'help' to see available commands.`,
       case 'cd':
         const newPath = args[0] ? resolvePath(args[0]) : '/';
         const targetItem = findItemAtPath(newPath);
-        
+
         if (!targetItem) {
           output = `cd: no such file or directory: ${args[0] || '/'}`;
           type = 'error';
@@ -235,7 +235,7 @@ Type 'help' to see available commands.`,
         } else {
           const filePath = resolvePath(args[0]);
           const file = findItemAtPath(filePath);
-          
+
           if (!file) {
             output = `cat: ${args[0]}: No such file or directory`;
             type = 'error';
@@ -387,7 +387,7 @@ Date:   ${new Date(Date.now() - 86400000).toDateString()}
 
       case 'help':
         output = `Available commands:
-  
+
 File Operations:
   ls, dir              - List directory contents
   cd <path>            - Change directory
@@ -395,7 +395,7 @@ File Operations:
   mkdir <name>         - Create directory
   touch <name>         - Create file
   cat <file>           - Display file contents
-  
+
 System:
   echo <text>          - Display text
   date                 - Show current date and time
@@ -403,7 +403,7 @@ System:
   uname [-a]           - Show system information
   ps                   - Show running processes
   history              - Show command history
-  
+
 Development:
   npm install          - Install npm packages
   npm run <script>     - Run npm script
@@ -412,12 +412,12 @@ Development:
   git status           - Git status
   git log              - Git log
   code [file]          - Open in editor
-  
+
 Terminal:
   clear, cls           - Clear terminal
   exit                 - Exit terminal
   help                 - Show this help message
-  
+
 Navigation:
   Use ↑/↓ arrows for command history
   Use Tab for auto-completion (coming soon)`;
@@ -441,9 +441,9 @@ Type 'help' for available commands`;
     setHistoryIndex(-1);
 
     // Add command to history display
-    setHistory(prev => [...prev, { 
-      command: cmd, 
-      output: '', 
+    setHistory(prev => [...prev, {
+      command: cmd,
+      output: '',
       type: 'command',
       timestamp: new Date()
     }]);
@@ -454,26 +454,26 @@ Type 'help' for available commands`;
       // Simulate async execution for some commands
       const asyncCommands = ['npm', 'git', 'node'];
       const baseCommand = cmd.split(' ')[0];
-      
-      let result;
-      if (asyncCommands.includes(baseCommand)) {
-        result = await simulateAsyncCommand(cmd);
-      } else {
-        result = executeCommandSync(cmd);
-      }
+
+		let result: { output: string; type: 'output' | 'error' };
+		if (asyncCommands.includes(baseCommand)) {
+			result = await simulateAsyncCommand(cmd);
+		} else {
+			result = executeCommandSync(cmd);
+		}
 
       if (result.output) {
-        setHistory(prev => [...prev, { 
-          command: '', 
-          output: result.output, 
+        setHistory(prev => [...prev, {
+          command: '',
+          output: result.output,
           type: result.type,
           timestamp: new Date()
         }]);
       }
     } catch (error) {
-      setHistory(prev => [...prev, { 
-        command: '', 
-        output: 'An error occurred while executing the command', 
+      setHistory(prev => [...prev, {
+        command: '',
+        output: 'An error occurred while executing the command',
         type: 'error',
         timestamp: new Date()
       }]);
@@ -514,9 +514,9 @@ Type 'help' for available commands`;
       e.preventDefault();
       setCurrentCommand('');
       setIsProcessing(false);
-      setHistory(prev => [...prev, { 
-        command: '', 
-        output: '^C', 
+      setHistory(prev => [...prev, {
+        command: '',
+        output: '^C',
         type: 'output',
         timestamp: new Date()
       }]);
@@ -570,11 +570,11 @@ Type 'help' for available commands`;
           </Button>
         </div>
       </div>
-      
+
       <div
         ref={terminalRef}
         className="flex-1 p-3 font-mono text-sm overflow-auto"
-        style={{ 
+        style={{
           fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
           fontSize: '14px',
           scrollBehavior: 'smooth',
@@ -591,7 +591,7 @@ Type 'help' for available commands`;
               </div>
             )}
             {entry.type === 'output' && entry.output && (
-              <div 
+              <div
                 className="text-[var(--vscode-editor-foreground)] whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{ __html: formatOutput(entry.output) }}
               />
@@ -601,7 +601,7 @@ Type 'help' for available commands`;
             )}
           </div>
         ))}
-        
+
         {/* Current input line */}
         <div className="flex items-center">
           <span className="text-green-400 mr-1">{getPrompt()}</span>
@@ -614,7 +614,7 @@ Type 'help' for available commands`;
               onKeyDown={handleKeyDown}
               disabled={isProcessing}
               className="w-full bg-transparent outline-none text-[var(--vscode-editor-foreground)] border-none p-0 m-0"
-              style={{ 
+              style={{
                 fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
                 fontSize: '14px',
                 caretColor: '#ffffff'
