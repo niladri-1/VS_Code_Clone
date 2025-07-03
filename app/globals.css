@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --vscode-editor-background: #1e1e1e;
+  --vscode-editor-foreground: #d4d4d4;
+  --vscode-sidebar-background: #252526;
+  --vscode-activitybar-background: #333333;
+  --vscode-statusbar-background: #007acc;
+  --vscode-menu-background: #2d2d30;
+  --vscode-menu-foreground: #cccccc;
+  --vscode-border: #454545;
+  --vscode-selection-background: #264f78;
+  --vscode-current-line: #2a2d2e;
+}
+
+.light {
+  --vscode-editor-background: #ffffff;
+  --vscode-editor-foreground: #383a42;
+  --vscode-sidebar-background: #f8f8f8;
+  --vscode-activitybar-background: #f0f0f0;
+  --vscode-statusbar-background: #007acc;
+  --vscode-menu-background: #f8f8f8;
+  --vscode-menu-foreground: #383a42;
+  --vscode-border: #e1e4e8;
+  --vscode-selection-background: #add6ff;
+  --vscode-current-line: #f0f0f0;
+}
+
+.high-contrast {
+  --vscode-editor-background: #000000;
+  --vscode-editor-foreground: #ffffff;
+  --vscode-sidebar-background: #000000;
+  --vscode-activitybar-background: #000000;
+  --vscode-statusbar-background: #0e639c;
+  --vscode-menu-background: #000000;
+  --vscode-menu-foreground: #ffffff;
+  --vscode-border: #6fc3df;
+  --vscode-selection-background: #ffffff;
+  --vscode-current-line: #ffffff;
+}
+
+/* One Dark Pro Theme */
+.one-dark-pro {
+  --vscode-editor-background: #282c34;
+  --vscode-editor-foreground: #abb2bf;
+  --vscode-sidebar-background: #21252b;
+  --vscode-activitybar-background: #181a1f;
+  --vscode-statusbar-background: #21252b;
+  --vscode-menu-background: #282c34;
+  --vscode-menu-foreground: #abb2bf;
+  --vscode-border: #181a1f;
+  --vscode-selection-background: #3e4451;
+  --vscode-current-line: #2c313c;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+  }
+
+  /* Hide scrollbars as per settings */
+  .vscode-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+  }
+
+  .vscode-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .vscode-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  .monaco-editor-container {
+    width: 100%;
+    height: 100%;
+    background: var(--vscode-editor-background) !important;
+  }
+
+  /* Custom cursor styling */
+  .monaco-editor .cursor {
+    width: 3px !important;
+  }
+
+  /* Hide minimap by default */
+  .monaco-editor .minimap {
+    display: none;
+  }
+
+  /* Custom line height */
+  .monaco-editor .view-lines {
+    line-height: 28px !important;
+  }
+
+  /* Smooth scrolling */
+  .monaco-editor .monaco-scrollable-element {
+    scroll-behavior: smooth;
+  }
+
+  /* Terminal cursor styling - FIXED */
+  .terminal-cursor {
+    width: 2px;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  /* Force editor background */
+  .monaco-editor,
+  .monaco-editor .monaco-editor-background,
+  .monaco-editor .margin {
+    background-color: var(--vscode-editor-background) !important;
+  }
+
+  /* Terminal input styling - prevent text blinking */
+  .terminal-input {
+    caret-color: #ffffff;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: var(--vscode-editor-foreground) !important;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  }
+
+  /* Ensure terminal text doesn't blink */
+  .terminal-input:focus {
+    animation: none !important;
+  }
+
+  /* Terminal prompt styling */
+  .terminal-prompt {
+    color: #4ec9b0;
+    font-weight: 500;
+  }
+
+  /* Terminal output colors */
+  .terminal-output {
+    color: var(--vscode-editor-foreground);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .terminal-error {
+    color: #f44747;
+  }
+
+  .terminal-success {
+    color: #4ec9b0;
+  }
+
+  .terminal-warning {
+    color: #ffcc02;
+  }
+
+  /* Processing indicator animation */
+  @keyframes spin {
+    0% { content: "⠋"; }
+    12.5% { content: "⠙"; }
+    25% { content: "⠹"; }
+    37.5% { content: "⠸"; }
+    50% { content: "⠼"; }
+    62.5% { content: "⠴"; }
+    75% { content: "⠦"; }
+    87.5% { content: "⠧"; }
+    100% { content: "⠇"; }
+  }
+
+  .processing-spinner::before {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@layer components {
+  .vscode-button {
+    @apply inline-flex items-center justify-center rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .vscode-button-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+
+  .vscode-button-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+
+  .vscode-button-ghost {
+    @apply hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .vscode-input {
+    @apply flex h-8 w-full rounded-sm border border-input bg-background px-2 py-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50;
+    background-color: var(--vscode-editor-background) !important;
+    border-color: var(--vscode-border) !important;
+    color: var(--vscode-editor-foreground) !important;
+  }
+
+  /* Activity bar at top styling */
+  .activity-bar-top {
+    @apply flex flex-row h-12 bg-[var(--vscode-activitybar-background)] border-b border-[var(--vscode-border)] w-full;
+  }
+
+  /* File tree indentation */
+  .file-tree-item {
+    padding-left: 30px;
+  }
+
+  /* No tabs styling */
+  .no-tabs .tab-list {
+    display: none;
+  }
+
+  /* Settings section styling */
+  .settings-section {
+    @apply space-y-6 p-6 bg-[var(--vscode-editor-background)];
+  }
+
+  .settings-group {
+    @apply space-y-4 p-4 border border-[var(--vscode-border)] rounded-md bg-[var(--vscode-sidebar-background)];
+  }
+
+  .settings-item {
+    @apply flex items-center justify-between py-2;
+  }
+
+  .settings-label {
+    @apply text-sm font-medium text-[var(--vscode-editor-foreground)];
+  }
+
+  .settings-description {
+    @apply text-xs text-[var(--vscode-editor-foreground)] opacity-70 mt-1;
+  }
+}
